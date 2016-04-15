@@ -5,7 +5,8 @@
 
 MainWindow::MainWindow()
 {
-    picLabel = new QLabel(this);
+    picLabel = new showLabel(this);
+    svm = new singviewmodel();
     picLabel->setAlignment(Qt::AlignBaseline);
     img = new QPixmap();
     setCentralWidget(picLabel);
@@ -172,11 +173,14 @@ void MainWindow::loadFile(const QString &fileName)
                              .arg(fileName));
         return;
     }
+
+    svm->img_height=img->height();
+    svm->img_width=img->width();
+
     picLabel->setPixmap(*img);
+    connect(picLabel,SIGNAL(mouseClick(char, int,int)), svm, SLOT(getPoint(char,int,int)));
     setCurrentFile(fileName);
-    //picLabel->setPixmap(img_pro->toPixmap());
-    statusBar()->showMessage(tr("Image %1 loaded")
-                             .arg(fileName), 4000);
+    statusBar()->showMessage(tr("Image %1 loaded").arg(fileName), 4000);
 }
 
 bool MainWindow::saveFile(const QString &fileName)

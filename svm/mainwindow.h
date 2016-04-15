@@ -3,10 +3,13 @@
 
 #include <QMainWindow>
 #include <QScrollArea>
-#include <QLabel>
+#include "showlabel.h"
+#include "singviewmodel.h"
 
 class QAction;
 class QMenu;
+class showLabel;
+class singviewmodel;
 
 class MainWindow : public QMainWindow
 {
@@ -21,6 +24,8 @@ protected:
 private slots:
     void open();
     bool save();
+    void v_click();
+    void r_click();
     void about();
 
 private:
@@ -37,7 +42,8 @@ private:
     void setCurrentFile(const QString &fileName);
     QString strippedName(const QString &fullFileName);
 
-    QLabel* picLabel;
+    showLabel* picLabel;
+    singviewmodel* svm;
     QPixmap* img;
     QString curFile;
 

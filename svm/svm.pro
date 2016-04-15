@@ -14,10 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    hpoint.cpp
+    hpoint.cpp \
+    singviewmodel.cpp
 
 HEADERS  += mainwindow.h \
-    hpoint.h
+    hpoint.h \
+    showlabel.h \
+    singviewmodel.h
 
 FORMS    += mainwindow.ui
 
