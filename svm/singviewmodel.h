@@ -13,8 +13,8 @@ class singviewmodel
 
 private:
     double alpha, beta, gama;
-    double fomula(hPoint b, hPoint t, hPoint vp, hPoint vp_line);
-    hPoint genVPL(hPoint* vp1, hPoint* vp2);
+    double formula(hPoint b, hPoint t, hPoint vp, hPoint vp_line);
+    hPoint genVPL(hPoint vp1, hPoint vp2);
 
 public:
     singviewmodel(const QString& fileName);
@@ -25,7 +25,9 @@ public:
 
     int img_width, img_height;
     int row, col;
-    hPoint* vp[3];
+    double dis[3];
+    hPoint origin;
+    hPoint vp[3];
     hPoint points[3][4];
     double homo_H[3][3], map_H[3][4];
 };

@@ -36,8 +36,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::open()
 {
     if (maybeSave()) {
-        QString fileName = QFileDialog::getOpenFileName(this, "", "", "images"
-                                                        "(*.png, *.jpg *.bmp)");
+        QString fileName =
+                QFileDialog::getOpenFileName(this, "", "", tr("Images (*.png *.jpg *.bmp)"));
         if (!fileName.isEmpty())
             loadFile(fileName);
     }
@@ -53,7 +53,19 @@ void MainWindow::getPoint(int x, int y)
     svm->points[svm->row][svm->col].x=x;
     svm->points[svm->row][svm->col].y=y;
     markPoint();
-    svm->genVP(svm->row);
+    emit updateInfo();
+}
+
+void MainWindow::setRefDistance(double val)
+{
+    svm->dis[info->tab] = val;
+    emit updateInfo();
+}
+
+void MainWindow::setOrigin(int x, int y)
+{
+    svm->origin.x = x;
+    svm->origin.y = y;
     emit updateInfo();
 }
 
@@ -61,6 +73,7 @@ void MainWindow::updateRowCol(int row, int col)
 {
     svm->col=col; svm->row=row;
     markPoint();
+    svm->getCoeff();
 }
 
 void MainWindow::markPoint()
@@ -93,12 +106,7 @@ void MainWindow::markPoint()
 
 void MainWindow::about()
 {
-   QMessageBox::about(this, tr("About COMP 5421 Proj"),
-            tr("In this project, you can create a tool that allows a user"
-               "to cut an object out of one image and paste it into another."
-               "The tool helps the user trace the object by providing a <em>live wire</em> "
-               "that automatically snaps to and wraps around the object of interest."
-               "You will then use your tool to create a composite image."));
+   QMessageBox::about(this, tr("About COMP 5421 Proj"),tr("Hello there"));
 }
 
 void MainWindow::createActions()
@@ -202,16 +210,15 @@ void MainWindow::loadFile(const QString &fileName)
         return;
     }
     svm = new singviewmodel(fileName);
-    svm->row = 0;
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Image %1 loaded").arg(fileName), 4000);
 
     infoWin = new QMainWindow(this);
-    infoWin->setFixedSize(300, 300);
+    infoWin->setFixedSize(500, 330);
     infoWin->show();
 
-    info = new svmInfo(infoWin, svm);
+    info = new svmInfo(infoWin, *svm);
 
     svm->col=info->check;
     svm->row=info->tab;
@@ -219,6 +226,8 @@ void MainWindow::loadFile(const QString &fileName)
     infoWin->setCentralWidget(info);
 
     connect(info, SIGNAL(pointChanged(int,int)), this, SLOT(updateRowCol(int,int)));
+    connect(info, SIGNAL(distanceChanged(double)), this, SLOT(setRefDistance(double)));
+    connect(info, SIGNAL(originChanged(int,int)), this, SLOT(setOrigin(int,int)));
     connect(this, SIGNAL(updateInfo()), info, SLOT(updateLabel()));
     connect(picLabel, SIGNAL(mouseClick(int,int)), this, SLOT(getPoint(int,int)));
     markPoint();
@@ -230,6 +239,9 @@ bool MainWindow::saveFile(const QString &fileName)
     if(new_save == NULL){
         return false;
     }
+    fwrite(svm->dis, sizeof(double), 3, new_save);
+    fwrite(&svm->origin, sizeof(hPoint), 1, new_save);
+    fwrite(svm->vp, sizeof(hPoint), 3, new_save);
     fwrite(svm->points, sizeof(hPoint), 3*4, new_save);
     fclose(new_save);
 

@@ -30,6 +30,8 @@ private slots:
     void open();
     bool save();
     void getPoint(int, int);
+    void setRefDistance(double);
+    void setOrigin(int, int);
     void updateRowCol(int, int);
     void about();
 
