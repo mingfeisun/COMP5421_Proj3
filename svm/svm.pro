@@ -15,14 +15,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     hpoint.cpp \
-    singviewmodel.cpp
+    singviewmodel.cpp \
+    svminfo.cpp
 
 HEADERS  += mainwindow.h \
     hpoint.h \
     showlabel.h \
-    singviewmodel.h
+    singviewmodel.h \
+    svminfo.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    svminfo.ui
 
 OTHER_FILES +=
 

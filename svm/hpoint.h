@@ -4,12 +4,12 @@
 class hPoint
 {
 public:
-    double x, y, w;
-
     hPoint();
     hPoint(double x, double y);
     hPoint(double x, double y, double w);
     void unif();
+
+    double x, y, w;
 };
 
 hPoint operator+(const hPoint lhs, const hPoint rhs);

@@ -1,16 +1,17 @@
 #include <QtWidgets>
 #include <QPixmap>
+#include <QWidget>
+#include <stdio.h>
 
 #include "mainwindow.h"
 
 MainWindow::MainWindow()
 {
     picLabel = new showLabel(this);
-    svm = new singviewmodel();
     picLabel->setAlignment(Qt::AlignBaseline);
-    img = new QPixmap();
-    setCentralWidget(picLabel);
+    or_img = new QPixmap();
 
+    setCentralWidget(picLabel);
     createActions();
     createMenus();
     createToolBars();
@@ -44,23 +45,51 @@ void MainWindow::open()
 
 bool MainWindow::save()
 {
-    return saveAs();
+    return saveFile(curFile);
 }
 
-bool MainWindow::saveAs()
+void MainWindow::getPoint(int x, int y)
 {
-    QFileDialog dialog(this);
-    dialog.setWindowModality(Qt::WindowModal);
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix("png");
-    dialog.setNameFilter("png");
-    QStringList files;
-    if (dialog.exec())
-        files = dialog.selectedFiles();
-    else
-        return false;
+    svm->points[svm->row][svm->col].x=x;
+    svm->points[svm->row][svm->col].y=y;
+    markPoint();
+    svm->genVP(svm->row);
+    svm->genVPL();
+    emit updateInfo();
+}
 
-    return saveFile(files.at(0));
+void MainWindow::updateRowCol(int row, int col)
+{
+    svm->col=col; svm->row=row;
+    markPoint();
+}
+
+void MainWindow::markPoint()
+{
+    img = new QPixmap(*or_img);
+    painter = new QPainter(img);
+    painter->setPen(QColor(255, 0, 0));
+    painter->setFont(QFont("Arial"));
+    for(int i=0; i<4; i++){
+        int x=svm->points[svm->row][i].x;
+        int y=svm->points[svm->row][i].y;
+        if(x==0 && y==0){
+            continue;
+        }
+        painter->drawText(x, y, tr("%1").arg(info->xp_disp[i]));
+        painter->drawPoint(x, y);
+    }
+    for(int i=0; i<2; i++){
+        int x1=svm->points[svm->row][2*i].x;
+        int y1=svm->points[svm->row][2*i].y;
+        int x2=svm->points[svm->row][2*i+1].x;
+        int y2=svm->points[svm->row][2*i+1].y;
+        if(x1==0 && y1==0 || x2==0 && y2==0){
+            continue;
+        }
+        painter->drawLine(x1, y1, x2, y2);
+    }
+    picLabel->setPixmap(*img);
 }
 
 void MainWindow::about()
@@ -144,7 +173,7 @@ void MainWindow::readSettings()
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("QtProject", "Application Example");
+    QSettings settings("Mingfei SUN", "COMP 5421 Project");
     settings.setValue("pos", pos());
     settings.setValue("size", size());
 }
@@ -167,34 +196,46 @@ bool MainWindow::maybeSave()
 
 void MainWindow::loadFile(const QString &fileName)
 {
-    if (!img->load(fileName)) {
+    if (!or_img->load(fileName)) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot open image %1.")
                              .arg(fileName));
         return;
     }
+    svm = new singviewmodel(fileName);
+    svm->row = 0;
 
-    svm->img_height=img->height();
-    svm->img_width=img->width();
-
-    picLabel->setPixmap(*img);
-    connect(picLabel,SIGNAL(mouseClick(char, int,int)), svm, SLOT(getPoint(char,int,int)));
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Image %1 loaded").arg(fileName), 4000);
+
+    infoWin = new QMainWindow(this);
+    infoWin->setFixedSize(300, 300);
+    infoWin->show();
+
+    info = new svmInfo(infoWin, svm);
+
+    svm->col=info->check;
+    svm->row=info->tab;
+
+    infoWin->setCentralWidget(info);
+
+    connect(info, SIGNAL(pointChanged(int,int)), this, SLOT(updateRowCol(int,int)));
+    connect(this, SIGNAL(updateInfo()), info, SLOT(updateLabel()));
+    connect(picLabel, SIGNAL(mouseClick(int,int)), this, SLOT(getPoint(int,int)));
+    markPoint();
 }
 
 bool MainWindow::saveFile(const QString &fileName)
 {
-    QPixmap new_save;
-    if(!new_save.save(fileName, "PNG")) {
-        QMessageBox::warning(this, tr("Save Image"),
-                             tr("Cannot save image %1.")
-                             .arg(fileName));
+    FILE* new_save = fopen((fileName+QString(".van")).toStdString().c_str(), "wb");
+    if(new_save == NULL){
         return false;
     }
+    fwrite(svm->points, sizeof(hPoint), 3*4, new_save);
+    fclose(new_save);
 
     setCurrentFile(fileName);
-    statusBar()->showMessage(tr("Image saved as %1").arg(fileName), 4000);
+    statusBar()->showMessage(tr("Parameters saved as %1").arg(fileName), 4000);
     return true;
 }
 

@@ -1,36 +1,36 @@
-#include "singleviewmodel.h"
+#include "singviewmodel.h"
 #include <string.h>
+#include <stdio.h>
 
-singviewmodel::singviewmodel()
+singviewmodel::singviewmodel(const QString& fileName)
 {
-    this->x_ind=0;
-    this->y_ind=0;
-    this->z_ind=0;
+    FILE* data_in;
+    data_in=fopen((fileName+QString(".van")).toStdString().c_str(), "rb");
+    if(data_in != NULL){
+        fread(points, sizeof(hPoint), 3*4, data_in);
+        genVP(0); genVP(1); genVP(2);
+        genVPL();
+    }
+    else{
+        for(int i=0; i<3; i++){
+            vp[i] = new hPoint();
+        }
+    }
+
     memset(this->homo_H, 0, sizeof(this->homo_H));
     memset(this->map_H, 0, sizeof(this->map_H));
 }
 
-void singviewmodel::genVP(char flag)
+void singviewmodel::genVP(int ind)
 {
-    switch(flag){
-    case 'x':
-        this->vpx = new hPoint((this->points[0][0]*this->points[0][1])*
-                (this->points[0][2]*this->points[0][3]));
-        break;
-    case 'y':
-        this->vpy = new hPoint((this->points[1][0]*this->points[1][1])*
-                (this->points[1][2]*this->points[1][3]));
-        break;
-    case 'z':
-        this->vpz = new hPoint((this->points[2][0]*this->points[2][1])*
-                (this->points[2][2]*this->points[2][3]));
-        break;
-    }
+    this->vp[ind] = new hPoint((this->points[ind][0]*this->points[ind][1])*
+            (this->points[ind][2]*this->points[ind][3]));
+    this->vp[ind]->unif();
 }
 
 void singviewmodel::genVPL()
 {
-    this->vpline = new hPoint((*(this->vpx))*(*(this->vpy)));
+    this->vpline = new hPoint((*(this->vp[0]))*(*(this->vp[1])));
 }
 
 void singviewmodel::comp3DPos()
@@ -40,24 +40,5 @@ void singviewmodel::comp3DPos()
 
 void singviewmodel::compTexMap()
 {
-    return;
-}
-
-void singviewmodel::getPoint(char flag, int x, int y)
-{
-    switch(flag){
-    case 'x':
-        this->points[0][this->x_ind].x=x;
-        this->points[0][this->x_ind++].y=y;
-        this->x_ind=this->x_ind%4;
-    case 'y':
-        this->points[1][this->y_ind].x=x;
-        this->points[1][this->y_ind++].y=y;
-        this->y_ind=this->y_ind%4;
-    case 'z':
-        this->points[2][this->z_ind].x=x;
-        this->points[2][this->z_ind++].y=y;
-        this->z_ind=this->z_ind%4;
-    }
     return;
 }

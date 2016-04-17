@@ -3,33 +3,27 @@
 #include <QPoint>
 #include <QObject>
 #include "hpoint.h"
+#include "svminfo.h"
 
 class hPoint;
+class svmInfo;
 
 class singviewmodel
 {
-public slots:
-    void getPoint(char, int, int);
 
-private:
-    int x_ind;
-    int y_ind;
-    int z_ind;
-
-    void genVP(char);
+public:
+    singviewmodel(const QString& fileName);
+    void genVP(int);
     void genVPL();
     void comp3DPos();
     void compTexMap();
 
-public:
-    singviewmodel();
-
     int img_width, img_height;
-
-    hPoint *vpx, *vpy, *vpz, *vpline;
+    int row, col;
+    hPoint* vp[3];
+    hPoint* vpline;
     hPoint points[3][4];
     double homo_H[3][3], map_H[3][4];
-
 };
 
 #endif // SINGVIEWMODEL_H

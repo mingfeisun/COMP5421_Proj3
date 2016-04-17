@@ -5,11 +5,13 @@
 #include <QScrollArea>
 #include "showlabel.h"
 #include "singviewmodel.h"
+#include "svminfo.h"
 
 class QAction;
 class QMenu;
 class showLabel;
 class singviewmodel;
+class svmInfo;
 
 class MainWindow : public QMainWindow
 {
@@ -21,11 +23,14 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
+signals:
+    void updateInfo();
+
 private slots:
     void open();
     bool save();
-    void v_click();
-    void r_click();
+    void getPoint(int, int);
+    void updateRowCol(int, int);
     void about();
 
 private:
@@ -36,7 +41,7 @@ private:
     void readSettings();
     void writeSettings();
     bool maybeSave();
-    bool saveAs();
+    void markPoint();
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);
@@ -44,7 +49,12 @@ private:
 
     showLabel* picLabel;
     singviewmodel* svm;
+    QMainWindow* infoWin;
+    svmInfo* info;
+
     QPixmap* img;
+    QPixmap* or_img;
+    QPainter* painter;
     QString curFile;
 
     QMenu *fileMenu;
