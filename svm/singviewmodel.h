@@ -11,17 +11,21 @@ class svmInfo;
 class singviewmodel
 {
 
+private:
+    double alpha, beta, gama;
+    double fomula(hPoint b, hPoint t, hPoint vp, hPoint vp_line);
+    hPoint genVPL(hPoint* vp1, hPoint* vp2);
+
 public:
     singviewmodel(const QString& fileName);
     void genVP(int);
-    void genVPL();
+    void getCoeff();
     void comp3DPos();
     void compTexMap();
 
     int img_width, img_height;
     int row, col;
     hPoint* vp[3];
-    hPoint* vpline;
     hPoint points[3][4];
     double homo_H[3][3], map_H[3][4];
 };

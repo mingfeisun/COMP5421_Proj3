@@ -28,9 +28,18 @@ void singviewmodel::genVP(int ind)
     this->vp[ind]->unif();
 }
 
-void singviewmodel::genVPL()
+void singviewmodel::getCoeff()
 {
-    this->vpline = new hPoint((*(this->vp[0]))*(*(this->vp[1])));
+}
+
+hPoint singviewmodel::genVPL(hPoint* vp1, hPoint* vp2)
+{
+    vpline = new hPoint((*vp1)*(*vp2));
+    double len = abs_hp(*vpline);
+    double x = vpline->x/len;
+    double y = vpline->y/len;
+    double w = vpline->w/len;
+    return hPoint(x, y, w);
 }
 
 void singviewmodel::comp3DPos()
@@ -41,4 +50,9 @@ void singviewmodel::comp3DPos()
 void singviewmodel::compTexMap()
 {
     return;
+}
+
+double singviewmodel::fomula(hPoint b, hPoint t, hPoint vp, hPoint vp_line)
+{
+    return -abs_hp(b*t)/(dot(vp_line, b)*abs_hp(vp*t));
 }

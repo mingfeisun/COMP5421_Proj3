@@ -54,7 +54,6 @@ void MainWindow::getPoint(int x, int y)
     svm->points[svm->row][svm->col].y=y;
     markPoint();
     svm->genVP(svm->row);
-    svm->genVPL();
     emit updateInfo();
 }
 

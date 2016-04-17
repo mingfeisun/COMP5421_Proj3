@@ -1,4 +1,5 @@
 #include "hpoint.h"
+#include <math.h>
 
 hPoint::hPoint()
 {
@@ -43,4 +44,16 @@ hPoint operator*(const hPoint lhs, const hPoint rhs)
     double y = lhs.w*rhs.x - rhs.w*lhs.x;
     double w = lhs.x*rhs.y - rhs.x*lhs.y;
     return hPoint(x,y,w);
+}
+
+
+double abs_hp(const hPoint rhs)
+{
+    return sqrt(dot(rhs, rhs));
+}
+
+
+double dot(const hPoint lhs, const hPoint rhs)
+{
+    return lhs.x*rhs.x + lhs.y*rhs.y + lhs.w*rhs.w;
 }
