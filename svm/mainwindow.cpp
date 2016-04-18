@@ -48,34 +48,6 @@ bool MainWindow::save()
     return saveFile(curFile);
 }
 
-void MainWindow::getPoint(int x, int y)
-{
-    svm->points[svm->row][svm->col].x=x;
-    svm->points[svm->row][svm->col].y=y;
-    markPoint();
-    emit updateInfo();
-}
-
-void MainWindow::setRefDistance(double val)
-{
-    svm->dis[info->tab] = val;
-    emit updateInfo();
-}
-
-void MainWindow::setOrigin(int x, int y)
-{
-    svm->origin.x = x;
-    svm->origin.y = y;
-    emit updateInfo();
-}
-
-void MainWindow::updateRowCol(int row, int col)
-{
-    svm->col=col; svm->row=row;
-    markPoint();
-    svm->getCoeff();
-}
-
 void MainWindow::markPoint()
 {
     img = new QPixmap(*or_img);
@@ -88,7 +60,7 @@ void MainWindow::markPoint()
         if(x==0 && y==0){
             continue;
         }
-        painter->drawText(x, y, tr("%1").arg(info->xp_disp[i]));
+        painter->drawText(x, y, tr("%1").arg(info->x1_label_disp[i]));
         painter->drawPoint(x, y);
     }
     for(int i=0; i<2; i++){
@@ -106,7 +78,15 @@ void MainWindow::markPoint()
 
 void MainWindow::about()
 {
-   QMessageBox::about(this, tr("About COMP 5421 Proj"),tr("Hello there"));
+    QMessageBox::about(this, tr("About COMP 5421 Proj"),tr("Hello there"));
+}
+
+void MainWindow::getPoint(int x, int y)
+{
+    svm->points[svm->row][svm->col].x=x;
+    svm->points[svm->row][svm->col].y=y;
+    markPoint();
+    info->updateLabel();
 }
 
 void MainWindow::createActions()
@@ -215,7 +195,7 @@ void MainWindow::loadFile(const QString &fileName)
     statusBar()->showMessage(tr("Image %1 loaded").arg(fileName), 4000);
 
     infoWin = new QMainWindow(this);
-    infoWin->setFixedSize(500, 330);
+    infoWin->setFixedSize(570, 330);
     infoWin->show();
 
     info = new svmInfo(infoWin, *svm);
@@ -225,10 +205,7 @@ void MainWindow::loadFile(const QString &fileName)
 
     infoWin->setCentralWidget(info);
 
-    connect(info, SIGNAL(pointChanged(int,int)), this, SLOT(updateRowCol(int,int)));
-    connect(info, SIGNAL(distanceChanged(double)), this, SLOT(setRefDistance(double)));
-    connect(info, SIGNAL(originChanged(int,int)), this, SLOT(setOrigin(int,int)));
-    connect(this, SIGNAL(updateInfo()), info, SLOT(updateLabel()));
+    connect(info, SIGNAL(svmChanged()), this, SLOT(markPoint()));
     connect(picLabel, SIGNAL(mouseClick(int,int)), this, SLOT(getPoint(int,int)));
     markPoint();
 }
@@ -239,10 +216,11 @@ bool MainWindow::saveFile(const QString &fileName)
     if(new_save == NULL){
         return false;
     }
-    fwrite(svm->dis, sizeof(double), 3, new_save);
+    fwrite(&svm->ref_height, sizeof(double), 1, new_save);
     fwrite(&svm->origin, sizeof(hPoint), 1, new_save);
     fwrite(svm->vp, sizeof(hPoint), 3, new_save);
     fwrite(svm->points, sizeof(hPoint), 3*4, new_save);
+    fwrite(svm->ref_points, sizeof(hPoint), 4, new_save);
     fclose(new_save);
 
     setCurrentFile(fileName);

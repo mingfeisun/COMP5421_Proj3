@@ -23,17 +23,12 @@ public:
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
-signals:
-    void updateInfo();
-
 private slots:
     void open();
     bool save();
-    void getPoint(int, int);
-    void setRefDistance(double);
-    void setOrigin(int, int);
-    void updateRowCol(int, int);
     void about();
+    void getPoint(int, int);
+    void markPoint();
 
 private:
     void createActions();
@@ -43,7 +38,6 @@ private:
     void readSettings();
     void writeSettings();
     bool maybeSave();
-    void markPoint();
     void loadFile(const QString &fileName);
     bool saveFile(const QString &fileName);
     void setCurrentFile(const QString &fileName);

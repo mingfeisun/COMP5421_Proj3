@@ -9,16 +9,24 @@ svmInfo::svmInfo(QWidget *parent, singviewmodel& svm) :
     ui->setupUi(this);
 
     tab=ui->vp->currentIndex();
-    check=0; o_x=0; o_y=0;
 
     connect(ui->vp, SIGNAL(currentIndexChanged(int)), this, SLOT(comboChanged(int)));
     connect(ui->x1_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
     connect(ui->x2_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
     connect(ui->x3_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
     connect(ui->x4_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
-    connect(ui->distance, SIGNAL(valueChanged(double)), this, SLOT(innerDisChanged(double)));
     connect(ui->origin_x, SIGNAL(textChanged(QString)), this, SLOT(innerOriChanged_x(QString)));
     connect(ui->origin_y, SIGNAL(textChanged(QString)), this, SLOT(innerOriChanged_y(QString)));
+
+    connect(ui->x1_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->x1_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->x2_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->x2_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->y1_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->y1_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->y2_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->y2_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+    connect(ui->z1_3d_z, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
 
     updateLabel();
 }
@@ -30,44 +38,61 @@ svmInfo::~svmInfo()
 
 void svmInfo::comboChanged(int index)
 {
-    tab = index;
-    ui->vpx->setText(vp_disp[tab]);
+    ui->vpx->setText(vp_disp[index]);
+    ui->x1_check->setText(tr("%1").arg(x1_label_disp[index]));
+    ui->x2_check->setText(tr("%1").arg(x2_label_disp[index]));
+    ui->x3_check->setText(tr("%1").arg(x3_label_disp[index]));
+    ui->x4_check->setText(tr("%1").arg(x4_label_disp[index]));
+    svm->row = index;
+    svm->genVP(index);
     updateLabel();
-    emit pointChanged(tab, check);
+    emit svmChanged();
 }
 
 void svmInfo::checkChanged()
 {
+    int temp;
     if(ui->x1_check->isChecked()){
-        check=0;
+        temp=0;
     }
     if(ui->x2_check->isChecked()){
-        check=1;
+        temp=1;
     }
     if(ui->x3_check->isChecked()){
-        check=2;
+        temp=2;
     }
     if(ui->x4_check->isChecked()){
-        check=3;
+        temp=3;
     }
-    emit pointChanged(tab, check);
+    svm->col=temp;
+    emit svmChanged();
 }
 
-void svmInfo::innerDisChanged(double val)
+void svmInfo::ref3DChanged()
 {
-    emit distanceChanged(val);
+    svm->ref_points[0].x = ui->x1_3d_x->text().toDouble();
+    svm->ref_points[0].y = ui->x1_3d_y->text().toDouble();
+    svm->ref_points[1].x = ui->x2_3d_x->text().toDouble();
+    svm->ref_points[1].y = ui->x2_3d_y->text().toDouble();
+    svm->ref_points[2].x = ui->y1_3d_x->text().toDouble();
+    svm->ref_points[2].y = ui->y1_3d_y->text().toDouble();
+    svm->ref_points[3].x = ui->y2_3d_x->text().toDouble();
+    svm->ref_points[3].y = ui->y2_3d_y->text().toDouble();
+
+    svm->ref_height = ui->z1_3d_z->text().toDouble();
+    updateLabel();
 }
 
 void svmInfo::innerOriChanged_x(QString text)
 {
-    o_x = text.toInt();
-    emit originChanged(o_x, o_y);
+    svm->origin.x = text.toInt();
+    updateLabel();
 }
 
 void svmInfo::innerOriChanged_y(QString text)
 {
-    o_y = text.toInt();
-    emit originChanged(o_x, o_y);
+    svm->origin.y = text.toInt();
+    updateLabel();
 }
 
 void svmInfo::updateLabel()
@@ -85,7 +110,16 @@ void svmInfo::updateLabel()
                           .arg(svm->vp[tab].x, 0, 'g', 4)
                           .arg(svm->vp[tab].y, 0, 'g', 4)
                           .arg(svm->vp[tab].w, 0, 'g', 4));
-    ui->distance->setValue(svm->dis[tab]);
     ui->origin_x->setText(tr("%1").arg(svm->origin.x));
     ui->origin_y->setText(tr("%1").arg(svm->origin.y));
+
+    ui->x1_3d_x->setText(tr("%1").arg(svm->ref_points[0].x));
+    ui->x1_3d_y->setText(tr("%1").arg(svm->ref_points[0].y));
+    ui->x2_3d_x->setText(tr("%1").arg(svm->ref_points[1].x));
+    ui->x2_3d_y->setText(tr("%1").arg(svm->ref_points[1].y));
+    ui->y1_3d_x->setText(tr("%1").arg(svm->ref_points[2].x));
+    ui->y1_3d_y->setText(tr("%1").arg(svm->ref_points[2].y));
+    ui->y2_3d_x->setText(tr("%1").arg(svm->ref_points[3].x));
+    ui->y2_3d_y->setText(tr("%1").arg(svm->ref_points[3].y));
+    ui->z1_3d_z->setText(tr("%1").arg(svm->ref_height));
 }

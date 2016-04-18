@@ -25,10 +25,11 @@ public:
 
     int img_width, img_height;
     int row, col;
-    double dis[3];
+    double ref_height;
     hPoint origin;
     hPoint vp[3];
     hPoint points[3][4];
+    hPoint ref_points[4];
     double homo_H[3][3], map_H[3][4];
 };
 
