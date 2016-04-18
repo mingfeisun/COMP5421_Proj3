@@ -60,7 +60,7 @@ void MainWindow::markPoint()
         if(x==0 && y==0){
             continue;
         }
-        painter->drawText(x, y, tr("%1").arg(info->x1_label_disp[i]));
+        painter->drawText(x, y, tr("%1").arg(info->xp_disp[i]));
         painter->drawPoint(x, y);
     }
     for(int i=0; i<2; i++){
