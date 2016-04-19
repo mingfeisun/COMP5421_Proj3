@@ -22,7 +22,8 @@ HEADERS  += mainwindow.h \
     hpoint.h \
     showlabel.h \
     singviewmodel.h \
-    svminfo.h
+    svminfo.h \
+    eigen.h
 
 FORMS    += mainwindow.ui \
     svminfo.ui

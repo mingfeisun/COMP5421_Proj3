@@ -41,8 +41,6 @@ private slots:
     void comboChanged(int);
     void checkChanged();
     void ref3DChanged();
-    void innerOriChanged_x(QString);
-    void innerOriChanged_y(QString);
 
 public slots:
     void updateLabel();

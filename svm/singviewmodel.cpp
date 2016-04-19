@@ -28,6 +28,18 @@ void singviewmodel::genVP(int ind)
     vp[ind].unif();
 }
 
+void singviewmodel::genOrigin()
+{
+    hPoint* temp = new hPoint((this->points[0][0]*this->points[0][1])*
+            (this->points[1][0]*this->points[1][1]));
+    origin.x = temp->x;
+    origin.y = temp->y;
+    origin.w = temp->w;
+    origin.unif();
+    origin.x = (int)origin.x;
+    origin.y = (int)origin.y;
+}
+
 void singviewmodel::getCoeff()
 {
 //    alpha = formula(points[0][0], points[0][1], vp[0], genVPL(vp[1], vp[2]))/dis[0];

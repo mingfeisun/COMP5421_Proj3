@@ -17,8 +17,6 @@ svmInfo::svmInfo(QWidget *parent, singviewmodel& svm) :
     connect(ui->x2_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
     connect(ui->x3_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
     connect(ui->x4_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
-    connect(ui->origin_x, SIGNAL(textChanged(QString)), this, SLOT(innerOriChanged_x(QString)));
-    connect(ui->origin_y, SIGNAL(textChanged(QString)), this, SLOT(innerOriChanged_y(QString)));
 
     connect(ui->x1_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
     connect(ui->x1_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
@@ -84,21 +82,10 @@ void svmInfo::ref3DChanged()
     updateLabel();
 }
 
-void svmInfo::innerOriChanged_x(QString text)
-{
-    svm->origin.x = text.toInt();
-    updateLabel();
-}
-
-void svmInfo::innerOriChanged_y(QString text)
-{
-    svm->origin.y = text.toInt();
-    updateLabel();
-}
-
 void svmInfo::updateLabel()
 {
     svm->genVP(svm->row);
+    svm->genOrigin();
 
     ui->x1_label->setText(tr("(%1, %2)")
                           .arg(svm->points[tab][0].x).arg(svm->points[tab][0].y));

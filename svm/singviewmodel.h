@@ -19,6 +19,8 @@ private:
 public:
     singviewmodel(const QString& fileName);
     void genVP(int);
+    void genOrigin();
+    void calcHomoH();
     void getCoeff();
     void comp3DPos();
     void compTexMap();
