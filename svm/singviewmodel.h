@@ -12,7 +12,7 @@ class singviewmodel
 {
 
 private:
-    double alpha, beta, gama;
+    double alpha;
     double formula(hPoint b, hPoint t, hPoint vp, hPoint vp_line);
     hPoint genVPL(hPoint vp1, hPoint vp2);
 
@@ -22,12 +22,13 @@ public:
     void genOrigin();
     void calcHomoH();
     void getCoeff();
-    void comp3DPos();
+    void comp3DPos(int x, int y);
     void compTexMap();
 
     int img_width, img_height;
     int row, col;
     double ref_height;
+    double X_3d, Y_3d, Z_3d;
     hPoint origin;
     hPoint vp[3];
     hPoint points[3][4];

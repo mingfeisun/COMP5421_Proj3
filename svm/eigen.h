@@ -2,6 +2,8 @@
 #define EIGEN_H
 #include <math.h>
 #include <malloc.h>
+#include <iostream>
+using namespace std;
 
 #define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
 

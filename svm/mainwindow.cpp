@@ -12,6 +12,7 @@ MainWindow::MainWindow()
     or_img = new QPixmap();
 
     setCentralWidget(picLabel);
+    setMouseTracking(true);
     createActions();
     createMenus();
     createToolBars();
@@ -74,6 +75,18 @@ void MainWindow::markPoint()
         painter->drawLine(x1, y1, x2, y2);
     }
     picLabel->setPixmap(*img);
+}
+
+void MainWindow::testMode(int val)
+{
+    if(val==0){
+        disconnect(picLabel, SIGNAL(mouseHover(int,int)), 0, 0);
+        connect(picLabel, SIGNAL(mouseClick(int,int)), this, SLOT(getPoint(int,int)));
+    }
+    else{
+        disconnect(picLabel, SIGNAL(mouseClick(int,int)), 0, 0);
+        connect(picLabel, SIGNAL(mouseHover(int,int)), info, SLOT(setTestPoint(int,int)));
+    }
 }
 
 void MainWindow::about()
@@ -190,6 +203,8 @@ void MainWindow::loadFile(const QString &fileName)
         return;
     }
     svm = new singviewmodel(fileName);
+    svm->img_height=or_img->height();
+    svm->img_width=or_img->width();
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("Image %1 loaded").arg(fileName), 4000);
@@ -203,6 +218,7 @@ void MainWindow::loadFile(const QString &fileName)
     infoWin->setCentralWidget(info);
 
     connect(info, SIGNAL(svmChanged()), this, SLOT(markPoint()));
+    connect(info, SIGNAL(test3D(int)), this, SLOT(testMode(int)));
     connect(picLabel, SIGNAL(mouseClick(int,int)), this, SLOT(getPoint(int,int)));
     markPoint();
 }

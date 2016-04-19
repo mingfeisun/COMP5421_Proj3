@@ -36,14 +36,17 @@ public:
 
 signals:
     void svmChanged();
+    void test3D(int);
 
 private slots:
     void comboChanged(int);
     void checkChanged();
     void ref3DChanged();
+    void testChecked(int);
 
 public slots:
     void updateLabel();
+    void setTestPoint(int, int);
 };
 
 #endif // SVMINFO_H

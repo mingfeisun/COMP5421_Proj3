@@ -29,6 +29,7 @@ private slots:
     void about();
     void getPoint(int, int);
     void markPoint();
+    void testMode(int);
 
 private:
     void createActions();

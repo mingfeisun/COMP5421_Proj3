@@ -296,7 +296,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d .tmp/svm1.0.0 || mkdir -p .tmp/svm1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/icon.qrc .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/mainwindow.h ../svm/hpoint.h ../svm/showlabel.h ../svm/singviewmodel.h ../svm/svminfo.h .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/main.cpp ../svm/mainwindow.cpp ../svm/hpoint.cpp ../svm/singviewmodel.cpp ../svm/svminfo.cpp .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/mainwindow.ui ../svm/svminfo.ui .tmp/svm1.0.0/ && (cd `dirname .tmp/svm1.0.0` && $(TAR) svm1.0.0.tar svm1.0.0 && $(COMPRESS) svm1.0.0.tar) && $(MOVE) `dirname .tmp/svm1.0.0`/svm1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/svm1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/icon.qrc .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/mainwindow.h ../svm/hpoint.h ../svm/showlabel.h ../svm/singviewmodel.h ../svm/svminfo.h ../svm/eigen.h .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/main.cpp ../svm/mainwindow.cpp ../svm/hpoint.cpp ../svm/singviewmodel.cpp ../svm/svminfo.cpp .tmp/svm1.0.0/ && $(COPY_FILE) --parents ../svm/mainwindow.ui ../svm/svminfo.ui .tmp/svm1.0.0/ && (cd `dirname .tmp/svm1.0.0` && $(TAR) svm1.0.0.tar svm1.0.0 && $(COMPRESS) svm1.0.0.tar) && $(MOVE) `dirname .tmp/svm1.0.0`/svm1.0.0.tar.gz . && $(DEL_FILE) -r .tmp/svm1.0.0
 
 
 clean:compiler_clean 
@@ -321,8 +321,8 @@ compiler_rcc_make_all: qrc_icon.cpp
 compiler_rcc_clean:
 	-$(DEL_FILE) qrc_icon.cpp
 qrc_icon.cpp: ../svm/icon.qrc \
-		../svm/save.png \
-		../svm/open.png
+		../svm/open.png \
+		../svm/save.png
 	/usr/lib/x86_64-linux-gnu/qt5/bin/rcc -name icon ../svm/icon.qrc -o qrc_icon.cpp
 
 compiler_moc_header_make_all: moc_mainwindow.cpp moc_showlabel.cpp moc_svminfo.cpp
@@ -451,6 +451,10 @@ moc_mainwindow.cpp: /usr/include/qt5/QtWidgets/QMainWindow \
 		../svm/singviewmodel.h \
 		/usr/include/qt5/QtCore/QPoint \
 		../svm/hpoint.h \
+		../svm/svminfo.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtWidgets/QDockWidget \
+		/usr/include/qt5/QtWidgets/qdockwidget.h \
 		../svm/mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../svm/mainwindow.h -o moc_mainwindow.cpp
 
@@ -569,9 +573,9 @@ moc_showlabel.cpp: /usr/include/qt5/QtWidgets/QLabel \
 		../svm/showlabel.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../svm/showlabel.h -o moc_showlabel.cpp
 
-moc_svminfo.cpp: /usr/include/qt5/QtWidgets/QWidget \
-		/usr/include/qt5/QtWidgets/qwidget.h \
-		/usr/include/qt5/QtGui/qwindowdefs.h \
+moc_svminfo.cpp: /usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
 		/usr/include/qt5/QtCore/qglobal.h \
 		/usr/include/qt5/QtCore/qconfig.h \
 		/usr/include/qt5/QtCore/qfeatures.h \
@@ -608,17 +612,19 @@ moc_svminfo.cpp: /usr/include/qt5/QtWidgets/QWidget \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
-		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
 		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtWidgets/QDockWidget \
+		/usr/include/qt5/QtWidgets/qdockwidget.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
 		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
 		/usr/include/qt5/QtGui/qwindowdefs_win.h \
 		/usr/include/qt5/QtCore/qobject.h \
-		/usr/include/qt5/QtCore/qstring.h \
-		/usr/include/qt5/QtCore/qchar.h \
-		/usr/include/qt5/QtCore/qbytearray.h \
-		/usr/include/qt5/QtCore/qrefcount.h \
-		/usr/include/qt5/QtCore/qarraydata.h \
-		/usr/include/qt5/QtCore/qstringbuilder.h \
 		/usr/include/qt5/QtCore/qlist.h \
 		/usr/include/qt5/QtCore/qalgorithms.h \
 		/usr/include/qt5/QtCore/qiterator.h \
@@ -677,6 +683,11 @@ moc_svminfo.cpp: /usr/include/qt5/QtWidgets/QWidget \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
+		../svm/singviewmodel.h \
+		/usr/include/qt5/QtCore/QPoint \
+		/usr/include/qt5/QtCore/QObject \
+		../svm/hpoint.h \
+		../svm/svminfo.h \
 		../svm/svminfo.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) $(INCPATH) -I/usr/include/c++/4.8 -I/usr/include/x86_64-linux-gnu/c++/4.8 -I/usr/include/c++/4.8/backward -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../svm/svminfo.h -o moc_svminfo.cpp
 
@@ -825,6 +836,10 @@ main.o: ../svm/main.cpp ../svm/mainwindow.h \
 		../svm/singviewmodel.h \
 		/usr/include/qt5/QtCore/QPoint \
 		../svm/hpoint.h \
+		../svm/svminfo.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtWidgets/QDockWidget \
+		/usr/include/qt5/QtWidgets/qdockwidget.h \
 		/usr/include/qt5/QtWidgets/QApplication \
 		/usr/include/qt5/QtWidgets/qapplication.h \
 		/usr/include/qt5/QtCore/qcoreapplication.h \
@@ -1271,6 +1286,7 @@ mainwindow.o: ../svm/mainwindow.cpp /usr/include/qt5/QtWidgets/QtWidgets \
 		/usr/include/qt5/QtWidgets/qtoolbutton.h \
 		/usr/include/qt5/QtWidgets/qtwidgetsversion.h \
 		/usr/include/qt5/QtGui/QPixmap \
+		/usr/include/qt5/QtWidgets/QWidget \
 		../svm/mainwindow.h \
 		/usr/include/qt5/QtWidgets/QMainWindow \
 		/usr/include/qt5/QtWidgets/QScrollArea \
@@ -1280,6 +1296,9 @@ mainwindow.o: ../svm/mainwindow.cpp /usr/include/qt5/QtWidgets/QtWidgets \
 		../svm/singviewmodel.h \
 		/usr/include/qt5/QtCore/QPoint \
 		../svm/hpoint.h \
+		../svm/svminfo.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtWidgets/QDockWidget \
 		ui_mainwindow.h \
 		/usr/include/qt5/QtWidgets/QAction \
 		/usr/include/qt5/QtWidgets/QApplication \
@@ -1287,8 +1306,7 @@ mainwindow.o: ../svm/mainwindow.cpp /usr/include/qt5/QtWidgets/QtWidgets \
 		/usr/include/qt5/QtWidgets/QHeaderView \
 		/usr/include/qt5/QtWidgets/QMenuBar \
 		/usr/include/qt5/QtWidgets/QStatusBar \
-		/usr/include/qt5/QtWidgets/QToolBar \
-		/usr/include/qt5/QtWidgets/QWidget
+		/usr/include/qt5/QtWidgets/QToolBar
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../svm/mainwindow.cpp
 
 hpoint.o: ../svm/hpoint.cpp ../svm/hpoint.h
@@ -1354,13 +1372,68 @@ singviewmodel.o: ../svm/singviewmodel.cpp ../svm/singviewmodel.h \
 		/usr/include/qt5/QtCore/qcontainerfwd.h \
 		/usr/include/qt5/QtCore/qisenum.h \
 		/usr/include/qt5/QtCore/qobject_impl.h \
-		../svm/hpoint.h
+		../svm/hpoint.h \
+		../svm/svminfo.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtWidgets/QDockWidget \
+		/usr/include/qt5/QtWidgets/qdockwidget.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtGui/qwindowdefs_win.h \
+		/usr/include/qt5/QtCore/qmargins.h \
+		/usr/include/qt5/QtCore/qrect.h \
+		/usr/include/qt5/QtCore/qsize.h \
+		/usr/include/qt5/QtGui/qpaintdevice.h \
+		/usr/include/qt5/QtGui/qpalette.h \
+		/usr/include/qt5/QtGui/qcolor.h \
+		/usr/include/qt5/QtGui/qrgb.h \
+		/usr/include/qt5/QtCore/qstringlist.h \
+		/usr/include/qt5/QtCore/qdatastream.h \
+		/usr/include/qt5/QtCore/qiodevice.h \
+		/usr/include/qt5/QtCore/qpair.h \
+		/usr/include/qt5/QtCore/qregexp.h \
+		/usr/include/qt5/QtCore/qstringmatcher.h \
+		/usr/include/qt5/QtGui/qbrush.h \
+		/usr/include/qt5/QtCore/qvector.h \
+		/usr/include/qt5/QtGui/qmatrix.h \
+		/usr/include/qt5/QtGui/qpolygon.h \
+		/usr/include/qt5/QtGui/qregion.h \
+		/usr/include/qt5/QtCore/qline.h \
+		/usr/include/qt5/QtGui/qtransform.h \
+		/usr/include/qt5/QtGui/qpainterpath.h \
+		/usr/include/qt5/QtGui/qimage.h \
+		/usr/include/qt5/QtGui/qpixmap.h \
+		/usr/include/qt5/QtCore/qsharedpointer.h \
+		/usr/include/qt5/QtCore/qshareddata.h \
+		/usr/include/qt5/QtCore/qsharedpointer_impl.h \
+		/usr/include/qt5/QtCore/qhash.h \
+		/usr/include/qt5/QtGui/qfont.h \
+		/usr/include/qt5/QtGui/qfontmetrics.h \
+		/usr/include/qt5/QtGui/qfontinfo.h \
+		/usr/include/qt5/QtWidgets/qsizepolicy.h \
+		/usr/include/qt5/QtGui/qcursor.h \
+		/usr/include/qt5/QtGui/qkeysequence.h \
+		/usr/include/qt5/QtGui/qevent.h \
+		/usr/include/qt5/QtCore/qvariant.h \
+		/usr/include/qt5/QtCore/qmap.h \
+		/usr/include/qt5/QtCore/qdebug.h \
+		/usr/include/qt5/QtCore/qtextstream.h \
+		/usr/include/qt5/QtCore/qlocale.h \
+		/usr/include/qt5/QtCore/qset.h \
+		/usr/include/qt5/QtCore/qcontiguouscache.h \
+		/usr/include/qt5/QtCore/qurl.h \
+		/usr/include/qt5/QtCore/qurlquery.h \
+		/usr/include/qt5/QtCore/qfile.h \
+		/usr/include/qt5/QtCore/qfiledevice.h \
+		/usr/include/qt5/QtGui/qvector2d.h \
+		/usr/include/qt5/QtGui/qtouchdevice.h \
+		../svm/eigen.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o singviewmodel.o ../svm/singviewmodel.cpp
 
 svminfo.o: ../svm/svminfo.cpp ../svm/svminfo.h \
-		/usr/include/qt5/QtWidgets/QWidget \
-		/usr/include/qt5/QtWidgets/qwidget.h \
-		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtCore/QString \
+		/usr/include/qt5/QtCore/qstring.h \
+		/usr/include/qt5/QtCore/qchar.h \
 		/usr/include/qt5/QtCore/qglobal.h \
 		/usr/include/qt5/QtCore/qconfig.h \
 		/usr/include/qt5/QtCore/qfeatures.h \
@@ -1397,17 +1470,19 @@ svminfo.o: ../svm/svminfo.cpp ../svm/svminfo.h \
 		/usr/include/qt5/QtCore/qtypeinfo.h \
 		/usr/include/qt5/QtCore/qtypetraits.h \
 		/usr/include/qt5/QtCore/qsysinfo.h \
-		/usr/include/qt5/QtCore/qobjectdefs.h \
+		/usr/include/qt5/QtCore/qbytearray.h \
+		/usr/include/qt5/QtCore/qrefcount.h \
 		/usr/include/qt5/QtCore/qnamespace.h \
+		/usr/include/qt5/QtCore/qarraydata.h \
+		/usr/include/qt5/QtCore/qstringbuilder.h \
+		/usr/include/qt5/QtWidgets/QDockWidget \
+		/usr/include/qt5/QtWidgets/qdockwidget.h \
+		/usr/include/qt5/QtWidgets/qwidget.h \
+		/usr/include/qt5/QtGui/qwindowdefs.h \
+		/usr/include/qt5/QtCore/qobjectdefs.h \
 		/usr/include/qt5/QtCore/qobjectdefs_impl.h \
 		/usr/include/qt5/QtGui/qwindowdefs_win.h \
 		/usr/include/qt5/QtCore/qobject.h \
-		/usr/include/qt5/QtCore/qstring.h \
-		/usr/include/qt5/QtCore/qchar.h \
-		/usr/include/qt5/QtCore/qbytearray.h \
-		/usr/include/qt5/QtCore/qrefcount.h \
-		/usr/include/qt5/QtCore/qarraydata.h \
-		/usr/include/qt5/QtCore/qstringbuilder.h \
 		/usr/include/qt5/QtCore/qlist.h \
 		/usr/include/qt5/QtCore/qalgorithms.h \
 		/usr/include/qt5/QtCore/qiterator.h \
@@ -1466,7 +1541,61 @@ svminfo.o: ../svm/svminfo.cpp ../svm/svminfo.h \
 		/usr/include/qt5/QtCore/qfiledevice.h \
 		/usr/include/qt5/QtGui/qvector2d.h \
 		/usr/include/qt5/QtGui/qtouchdevice.h \
-		ui_svminfo.h
+		../svm/singviewmodel.h \
+		/usr/include/qt5/QtCore/QPoint \
+		/usr/include/qt5/QtCore/QObject \
+		../svm/hpoint.h \
+		ui_svminfo.h \
+		/usr/include/qt5/QtCore/QVariant \
+		/usr/include/qt5/QtWidgets/QAction \
+		/usr/include/qt5/QtWidgets/qaction.h \
+		/usr/include/qt5/QtGui/qicon.h \
+		/usr/include/qt5/QtWidgets/qactiongroup.h \
+		/usr/include/qt5/QtWidgets/QApplication \
+		/usr/include/qt5/QtWidgets/qapplication.h \
+		/usr/include/qt5/QtCore/qcoreapplication.h \
+		/usr/include/qt5/QtCore/qeventloop.h \
+		/usr/include/qt5/QtWidgets/qdesktopwidget.h \
+		/usr/include/qt5/QtGui/qguiapplication.h \
+		/usr/include/qt5/QtGui/qinputmethod.h \
+		/usr/include/qt5/QtWidgets/QButtonGroup \
+		/usr/include/qt5/QtWidgets/qbuttongroup.h \
+		/usr/include/qt5/QtWidgets/QComboBox \
+		/usr/include/qt5/QtWidgets/qcombobox.h \
+		/usr/include/qt5/QtWidgets/qabstractitemdelegate.h \
+		/usr/include/qt5/QtWidgets/qstyleoption.h \
+		/usr/include/qt5/QtWidgets/qabstractspinbox.h \
+		/usr/include/qt5/QtGui/qvalidator.h \
+		/usr/include/qt5/QtCore/qregularexpression.h \
+		/usr/include/qt5/QtWidgets/qslider.h \
+		/usr/include/qt5/QtWidgets/qabstractslider.h \
+		/usr/include/qt5/QtWidgets/qstyle.h \
+		/usr/include/qt5/QtWidgets/qtabbar.h \
+		/usr/include/qt5/QtWidgets/qtabwidget.h \
+		/usr/include/qt5/QtWidgets/qrubberband.h \
+		/usr/include/qt5/QtWidgets/qframe.h \
+		/usr/include/qt5/QtCore/qabstractitemmodel.h \
+		/usr/include/qt5/QtWidgets/QGroupBox \
+		/usr/include/qt5/QtWidgets/qgroupbox.h \
+		/usr/include/qt5/QtWidgets/QHeaderView \
+		/usr/include/qt5/QtWidgets/qheaderview.h \
+		/usr/include/qt5/QtWidgets/qabstractitemview.h \
+		/usr/include/qt5/QtWidgets/qabstractscrollarea.h \
+		/usr/include/qt5/QtCore/qitemselectionmodel.h \
+		/usr/include/qt5/QtWidgets/QLabel \
+		/usr/include/qt5/QtWidgets/qlabel.h \
+		/usr/include/qt5/QtWidgets/QLineEdit \
+		/usr/include/qt5/QtWidgets/qlineedit.h \
+		/usr/include/qt5/QtGui/qtextcursor.h \
+		/usr/include/qt5/QtGui/qtextformat.h \
+		/usr/include/qt5/QtGui/qpen.h \
+		/usr/include/qt5/QtGui/qtextoption.h \
+		/usr/include/qt5/QtWidgets/QPushButton \
+		/usr/include/qt5/QtWidgets/qpushbutton.h \
+		/usr/include/qt5/QtWidgets/qabstractbutton.h \
+		/usr/include/qt5/QtWidgets/QRadioButton \
+		/usr/include/qt5/QtWidgets/qradiobutton.h \
+		/usr/include/qt5/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o svminfo.o ../svm/svminfo.cpp
 
 qrc_icon.o: qrc_icon.cpp 

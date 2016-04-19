@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
@@ -102,12 +103,16 @@ public:
     QLabel *label_3;
     QLabel *label_28;
     QLabel *label_29;
+    QGroupBox *groupBox_5;
+    QCheckBox *test_check;
+    QLabel *test_point_3d;
+    QLabel *test_point;
 
     void setupUi(QWidget *svmInfo)
     {
         if (svmInfo->objectName().isEmpty())
             svmInfo->setObjectName(QStringLiteral("svmInfo"));
-        svmInfo->resize(570, 346);
+        svmInfo->resize(570, 411);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -155,7 +160,7 @@ public:
         vp->setGeometry(QRect(0, 30, 161, 27));
         groupBox_2 = new QGroupBox(svmInfo);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        groupBox_2->setGeometry(QRect(30, 250, 171, 61));
+        groupBox_2->setGeometry(QRect(30, 270, 171, 61));
         groupBox_2->setAutoFillBackground(true);
         groupBox_2->setFlat(true);
         label_4 = new QLabel(groupBox_2);
@@ -182,7 +187,7 @@ public:
         origin_x->setReadOnly(true);
         groupBox_3 = new QGroupBox(svmInfo);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        groupBox_3->setGeometry(QRect(220, 160, 320, 161));
+        groupBox_3->setGeometry(QRect(220, 220, 320, 171));
         groupBox_3->setAutoFillBackground(true);
         ref_dir = new QComboBox(groupBox_3);
         ref_dir->setObjectName(QStringLiteral("ref_dir"));
@@ -403,6 +408,18 @@ public:
         label_29 = new QLabel(groupBox_4);
         label_29->setObjectName(QStringLiteral("label_29"));
         label_29->setGeometry(QRect(40, 122, 21, 20));
+        groupBox_5 = new QGroupBox(svmInfo);
+        groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
+        groupBox_5->setGeometry(QRect(220, 160, 320, 51));
+        test_check = new QCheckBox(groupBox_5);
+        test_check->setObjectName(QStringLiteral("test_check"));
+        test_check->setGeometry(QRect(20, 20, 61, 22));
+        test_point_3d = new QLabel(groupBox_5);
+        test_point_3d->setObjectName(QStringLiteral("test_point_3d"));
+        test_point_3d->setGeometry(QRect(140, 20, 161, 22));
+        test_point = new QLabel(groupBox_5);
+        test_point->setObjectName(QStringLiteral("test_point"));
+        test_point->setGeometry(QRect(80, 20, 61, 22));
 
         retranslateUi(svmInfo);
 
@@ -497,6 +514,10 @@ public:
         label_3->setText(QApplication::translate("svmInfo", "Y1", 0));
         label_28->setText(QApplication::translate("svmInfo", "Y2", 0));
         label_29->setText(QApplication::translate("svmInfo", "Z1", 0));
+        groupBox_5->setTitle(QApplication::translate("svmInfo", "3D Test", 0));
+        test_check->setText(QApplication::translate("svmInfo", "Test", 0));
+        test_point_3d->setText(QString());
+        test_point->setText(QString());
     } // retranslateUi
 
 };

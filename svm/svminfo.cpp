@@ -27,6 +27,8 @@ svmInfo::svmInfo(QWidget *parent, singviewmodel& svm) :
     connect(ui->y2_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
     connect(ui->y2_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
     connect(ui->z1_3d_z, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
+
+    connect(ui->test_check, SIGNAL(stateChanged(int)), this, SLOT(testChecked(int)));
 }
 
 svmInfo::~svmInfo()
@@ -77,9 +79,15 @@ void svmInfo::ref3DChanged()
     svm->ref_points[2].y = ui->y1_3d_y->text().toDouble();
     svm->ref_points[3].x = ui->y2_3d_x->text().toDouble();
     svm->ref_points[3].y = ui->y2_3d_y->text().toDouble();
+    svm->calcHomoH();
 
     svm->ref_height = ui->z1_3d_z->text().toDouble();
     updateLabel();
+}
+
+void svmInfo::testChecked(int val)
+{
+    emit test3D(val);
 }
 
 void svmInfo::updateLabel()
@@ -111,4 +119,14 @@ void svmInfo::updateLabel()
     ui->y2_3d_x->setText(tr("%1").arg(svm->ref_points[3].x));
     ui->y2_3d_y->setText(tr("%1").arg(svm->ref_points[3].y));
     ui->z1_3d_z->setText(tr("%1").arg(svm->ref_height));
+}
+
+void svmInfo::setTestPoint(int x, int y)
+{
+    if(x>=svm->img_width || y>=svm->img_height){
+        return;
+    }
+    ui->test_point->setText(tr("(%1,%2)").arg(x).arg(y));
+    svm->comp3DPos(x, y);
+    ui->test_point_3d->setText(tr("(%1,%2,%3)").arg(svm->X_3d).arg(svm->Y_3d).arg(svm->Z_3d));
 }
