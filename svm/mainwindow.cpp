@@ -60,7 +60,7 @@ void MainWindow::markPoint()
         if(x==0 && y==0){
             continue;
         }
-        painter->drawText(x, y, tr("%1").arg(info->xp_disp[i]));
+        painter->drawText(x, y, tr("%1").arg(info->point_disp[svm->row][i]));
         painter->drawPoint(x, y);
     }
     for(int i=0; i<2; i++){
@@ -199,9 +199,6 @@ void MainWindow::loadFile(const QString &fileName)
     infoWin->show();
 
     info = new svmInfo(infoWin, *svm);
-
-    svm->col=info->check;
-    svm->row=info->tab;
 
     infoWin->setCentralWidget(info);
 

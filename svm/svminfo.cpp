@@ -9,6 +9,8 @@ svmInfo::svmInfo(QWidget *parent, singviewmodel& svm) :
     ui->setupUi(this);
 
     tab=ui->vp->currentIndex();
+    check=0;
+    updateLabel();
 
     connect(ui->vp, SIGNAL(currentIndexChanged(int)), this, SLOT(comboChanged(int)));
     connect(ui->x1_check, SIGNAL(toggled(bool)), this, SLOT(checkChanged()));
@@ -27,8 +29,6 @@ svmInfo::svmInfo(QWidget *parent, singviewmodel& svm) :
     connect(ui->y2_3d_x, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
     connect(ui->y2_3d_y, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
     connect(ui->z1_3d_z, SIGNAL(textChanged(QString)), this, SLOT(ref3DChanged()));
-
-    updateLabel();
 }
 
 svmInfo::~svmInfo()
@@ -44,7 +44,7 @@ void svmInfo::comboChanged(int index)
     ui->x3_check->setText(tr("%1").arg(x3_label_disp[index]));
     ui->x4_check->setText(tr("%1").arg(x4_label_disp[index]));
     svm->row = index;
-    svm->genVP(index);
+    tab=index;
     updateLabel();
     emit svmChanged();
 }
@@ -65,6 +65,7 @@ void svmInfo::checkChanged()
         temp=3;
     }
     svm->col=temp;
+    check=temp;
     emit svmChanged();
 }
 
@@ -97,6 +98,8 @@ void svmInfo::innerOriChanged_y(QString text)
 
 void svmInfo::updateLabel()
 {
+    svm->genVP(svm->row);
+
     ui->x1_label->setText(tr("(%1, %2)")
                           .arg(svm->points[tab][0].x).arg(svm->points[tab][0].y));
     ui->x2_label->setText(tr("(%1, %2)")
@@ -105,7 +108,6 @@ void svmInfo::updateLabel()
                           .arg(svm->points[tab][2].x).arg(svm->points[tab][2].y));
     ui->x4_label->setText(tr("(%1, %2)")
                           .arg(svm->points[tab][3].x).arg(svm->points[tab][3].y));
-    svm->genVP(tab);
     ui->vp_label->setText(tr("(%1, %2, %3)")
                           .arg(svm->vp[tab].x, 0, 'g', 4)
                           .arg(svm->vp[tab].y, 0, 'g', 4)

@@ -25,7 +25,9 @@ public:
 
     int tab, check;
     const char* vp_disp[3]={"VPX", "VPY", "VPZ"};
-    const char* xp_disp[4]={"x1", "x2", "x3", "x4"};
+    const char* point_disp[3][4]={{"x1", "x2", "x3", "x4"},
+                             {"y1", "y2", "y3", "y4"},
+                             {"z1", "z2", "z3", "z4"}};
     const char* x1_label_disp[3]={"X1", "Y1", "Z1"};
     const char* x2_label_disp[3]={"X2", "Y2", "Z2"};
     const char* x3_label_disp[3]={"X3", "Y3", "Z3"};

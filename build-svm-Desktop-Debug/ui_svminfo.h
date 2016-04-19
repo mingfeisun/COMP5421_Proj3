@@ -139,7 +139,7 @@ public:
         x1_check = new QRadioButton(groupBox);
         x1_check->setObjectName(QStringLiteral("x1_check"));
         x1_check->setGeometry(QRect(10, 70, 48, 22));
-        x1_check->setChecked(false);
+        x1_check->setChecked(true);
         x2_check = new QRadioButton(groupBox);
         x2_check->setObjectName(QStringLiteral("x2_check"));
         x2_check->setGeometry(QRect(10, 100, 48, 22));
