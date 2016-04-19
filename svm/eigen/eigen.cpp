@@ -1,6 +1,7 @@
 #include <math.h>
-#include <iostream.h>
+#include <iostream>
 #include <malloc.h>
+using namespace std;
 
 #define SIGN(a,b) ((b)<0 ? -fabs(a) : fabs(a))
 
@@ -196,7 +197,7 @@ void eig_sys (int dimension, float **m, float **eig_vec, float *eig_val)
 	}
 }
 
-void main () {
+int main () {
 	float *eig_val = (float *) calloc (3,sizeof(float));
 	float **eig_vec = (float**) calloc (3,sizeof(float*));
 	float **m = (float**) calloc (3,sizeof(float*));
@@ -209,12 +210,13 @@ void main () {
 	m[2][0] = 1; m[2][1] = 1; m[2][2] = 2; 
 	eig_sys (3,m,eig_vec,eig_val);
 	cout << "eigenvalues " ;
-	for (i=0;i<3;i++) cout << eig_val[i] << " ";
+	for (int i=0;i<3;i++) cout << eig_val[i] << " ";
 	cout << endl;
 	cout << "eigenvectors";
-	for (i=0;i<3;i++) {
+	for (int i=0;i<3;i++) {
 		cout << endl;
 		for (int j=0;j<3;j++)
 			cout << eig_vec[i][j] << " " ;
 	}
+    return 0;
 }
