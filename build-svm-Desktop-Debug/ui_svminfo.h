@@ -173,11 +173,13 @@ public:
         origin_y->setAutoFillBackground(false);
         origin_y->setInputMethodHints(Qt::ImhDigitsOnly);
         origin_y->setMaxLength(4);
+        origin_y->setReadOnly(true);
         origin_x = new QLineEdit(groupBox_2);
         origin_x->setObjectName(QStringLiteral("origin_x"));
         origin_x->setGeometry(QRect(53, 25, 40, 25));
         origin_x->setInputMethodHints(Qt::ImhDigitsOnly);
         origin_x->setMaxLength(4);
+        origin_x->setReadOnly(true);
         groupBox_3 = new QGroupBox(svmInfo);
         groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
         groupBox_3->setGeometry(QRect(220, 160, 320, 161));
